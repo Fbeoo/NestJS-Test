@@ -1,7 +1,8 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ConfigService } from '@nestjs/config';
 
-@Controller()
+@Controller('v1')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -10,8 +11,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('calculate/:a/:b')
-  calculate(@Param('a', ParseIntPipe) a: number, @Param('b', ParseIntPipe) b: number) {
-    return this.appService.calculate(a, b);
+  @Get('test')
+  test() {
+    return this.appService.testConfig();
   }
 }
