@@ -7,6 +7,7 @@ import { User } from './user.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([User])], // Đánh dấu class User là một entity
   providers: [UserService],
-  controllers: [UserController]
+  controllers: [UserController],
+  exports: [UserService]
 })
 export class UserModule {}
