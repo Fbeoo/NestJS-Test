@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Body, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/user.dto';
@@ -13,7 +13,7 @@ export class UserController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<User | null> {
+    findOne(@Param('id', ParseIntPipe) id: string): Promise<User | null> {
         return this.userService.findOne(id);
     }
 

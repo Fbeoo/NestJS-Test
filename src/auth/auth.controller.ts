@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, UseGuards, Request, HttpCode, HttpS
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { AuthGuard } from './auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
