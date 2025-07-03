@@ -1,8 +1,15 @@
-import { Controller, Delete, Get, Param, Post, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/role/role.enum';
+import { Roles } from 'src/role/role.decorator';
+import { RoleGuard } from 'src/role/role.guard';
 
+// @UseGuards(AuthGuard('jwt')) // Áp dụng cho toàn bộ controller
+@UseGuards(AuthGuard('jwt'), RoleGuard)
+@Roles(Role.ADMIN)
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}

@@ -9,6 +9,7 @@ import { RedirectMiddleware } from './common/middleware/redirect.middleware';
 import { UserController } from './user/user.controller';
 import { PathMiddleware } from './common/middleware/path.middleware';
 import { AuthModule } from './auth/auth.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -16,13 +17,18 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({ // Cấu hình kết nối database
-      type: 'sqlite',
-      database: 'database.sqlite',
+      type: process.env.DB_CONNECTION as any,
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT as string, 10) || 5432,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'], // Tự động tìm kiếm tất cả các entity trong project
       synchronize: true,
     }),
     UserModule,
     AuthModule,
+    PostModule,
   ],  
   controllers: [AppController],
   providers: [AppService],
