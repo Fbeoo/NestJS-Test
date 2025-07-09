@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
-
+import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +23,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true, // Bỏ field không có trong DTO
     forbidNonWhitelisted: true, // Nếu có field không có trong DTO thì trả về lỗi
+    transform: true, // Chuyển đổi dữ liệu từ string sang number, boolean, ...
   }));
+
+  // app.useGlobalFilters(new HttpExceptionFilter()); // Áp dụng global filter cho toàn bộ controller
 
   await app.listen(process.env.PORT ?? 3000);
 }

@@ -1,14 +1,16 @@
-import { Controller, Delete, Get, Param, Post, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Body, ParseIntPipe, UseGuards, NotFoundException, UsePipes } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from 'src/role/role.enum';
 import { Roles } from 'src/role/role.decorator';
 import { RoleGuard } from 'src/role/role.guard';
+import { IsPhoneNumberPipe } from 'src/common/pipes/phone-number.pipe';
 
 // @UseGuards(AuthGuard('jwt')) // Áp dụng cho toàn bộ controller
 @UseGuards(AuthGuard('jwt'), RoleGuard)
+// @UsePipes(IsPhoneNumberPipe)
 @Roles(Role.ADMIN)
 @Controller('user')
 export class UserController {
@@ -20,13 +22,19 @@ export class UserController {
     }
 
     @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: string): Promise<User | null> {
-        return this.userService.findOne(id);
+    async findOne(@Param('id', ParseIntPipe) id: string): Promise<User | null> {
+        const user = await this.userService.findOne(id);
+
+        if (!user) {
+            throw new NotFoundException('User not found');  
+        }
+
+        return user;
     }
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto): Promise<User> {
-        return this.userService.create(createUserDto);
+    async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+        return await this.userService.create(createUserDto);
     }
 
     @Delete(':id')

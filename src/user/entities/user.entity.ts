@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Post } from '../../post/entities/post.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity() // Đánh dấu class User là một entity
 export class User {
@@ -16,4 +17,7 @@ export class User {
 
     @Column()
     role: number;
+
+    @OneToMany(type => Post, post => post.user_id)
+    posts: Post[];
 }

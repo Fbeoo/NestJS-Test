@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/user.dto';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(User) // InjectRepository là một decorator, dùng để inject repository vào service
-        private userRepository: Repository<User>,
+        private readonly userRepository: UserRepository, 
     ) {}
 
     async findAll(): Promise<User[]> {
